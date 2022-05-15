@@ -1,22 +1,25 @@
-/*
- * класс реализует логику работы приложения имплементируя ApplicationInterface;
+/**
+ * Класс реализует логику работы приложения имплементируя ApplicationInterface;
  * public void runApplication() - вызывает методы до тех пор пока переменная runAp = true;
  * public void showUserMenu() - метод реализует показ пользователю пунктов меню приложения;
  * public void  handleUserSelection() - метод реализует запрос действия от пользователя;
- * public void performSelectedAction() - метод обрабатывет выбор пользователя в зависимости от выбранного пункта меню;
+ * public void performSelectedAction() - метод обрабатывет выбор пользователя в зависимости от выбранного пункта меню
  * */
-package main.Classes;
+package main.java.applicationLogic;
 
-import main.Interfaces.ApplicationInterface;
-import main.Interfaces.DictionaryInterface;
+import main.java.userInterface.MenuItems;
+import main.java.logicImplementation.DictionaryInterface;
+import main.java.userInterface.CommunicationWithTheUser;
+import main.java.logicImplementation.CheckFunctions;
+import main.java.logicImplementation.RequestFunctions;
 
 public class SimpleConsoleApplication implements ApplicationInterface {
-    String selectedItem;
-    DictionaryInterface simpleConsoleApplicationIOMethods;
-    CommunicationWithTheUser communicationWithTheUser;
-    CheckFunctions checkFunctions;
-    RequestFunctions requestFunctions;
-    private boolean runAp = true;
+    private String selectedItem;
+    private DictionaryInterface simpleConsoleApplicationIOMethods;
+    private CommunicationWithTheUser communicationWithTheUser;
+    private CheckFunctions checkFunctions;
+    private RequestFunctions requestFunctions;
+    private boolean runAp;
 
     public SimpleConsoleApplication(DictionaryInterface simpleConsoleApplicationIOMethods, CommunicationWithTheUser communicationWithTheUser, CheckFunctions checkFunctions, RequestFunctions requestFunctions) {
         this.simpleConsoleApplicationIOMethods = simpleConsoleApplicationIOMethods;
@@ -28,12 +31,18 @@ public class SimpleConsoleApplication implements ApplicationInterface {
     public void setSelectedItem(String selectedItem) {
         this.selectedItem = selectedItem;
     }
-
+    private void setRunUp(boolean value){
+        this.runAp = value;
+    }
+    private boolean getRunAp(){
+        return runAp;
+    }
 
 
     public void runApplication(){
         checkFunctions.checkFileExistence();
-        while (runAp) {
+        setRunUp(true);
+        while (getRunAp()) {
             showUserMenu();
             handleUserSelection();
             performSelectedAction();
@@ -42,23 +51,23 @@ public class SimpleConsoleApplication implements ApplicationInterface {
 
     public void showUserMenu(){
         communicationWithTheUser.showMenu();
-    };
+    }
 
     public void  handleUserSelection(){
         setSelectedItem(requestFunctions.promptUserSelection());
-    };
+    }
 
     public void performSelectedAction(){
-        if(selectedItem.equals("1")){
-            simpleConsoleApplicationIOMethods.showDictionary();
-        } else if(selectedItem.equals("2")){
-            simpleConsoleApplicationIOMethods.findEntryInDictionary();
-        } else if(selectedItem.equals("3")){
+        if(selectedItem.equals(MenuItems.SHOW_ALL.getMenuItem())){
+                simpleConsoleApplicationIOMethods.showDictionary();
+        } else if(selectedItem.equals(MenuItems.FIND.getMenuItem())){
+                simpleConsoleApplicationIOMethods.findEntryInDictionary();
+        } else if(selectedItem.equals(MenuItems.ADD.getMenuItem())){
             simpleConsoleApplicationIOMethods.makeEntryInDictionary();
-        } else if(selectedItem.equals("4")){
+        } else if(selectedItem.equals(MenuItems.DELETE.getMenuItem())){
             simpleConsoleApplicationIOMethods.deleteEntryInDictionary();
-        } else if (selectedItem.equals("5")){
-            runAp = false;
+        } else if (selectedItem.equals(MenuItems.EXIT.getMenuItem())){
+            setRunUp(false);
         }
     }
 }

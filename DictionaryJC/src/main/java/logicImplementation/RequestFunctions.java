@@ -1,19 +1,23 @@
-/*
- * класс реализует методы запроса данных у пользователя:
+/**
+ * Класс реализует методы запроса данных у пользователя:
  * public String promptUserSelection() - запрос пункта меню;
  * public String promptDictionaryType() - запрос типа словаря с которым хочет работать пользователь;
- * public String requestExpressiont(String numDict) - метод запроса слова(ключа) для словаря и проверка его на удовлетвореня условиям ТЗ для конкретного словаря, в зависимости от того какой словарь выбран;
+ * public String requestExpressiont(String numDict) - метод запроса слова(ключа) для словаря
+ * и проверка его на удовлетвореня условиям ТЗ для конкретного словаря, в зависимости от того какой словарь выбран;
  * public String requestExpressionValue(String numDict) - метод запроса слова(значения) для словаря и проверка его на удовлетвореня условиям ТЗ для конкретного словаря, в зависимости от того какой словарь выбран;
  *  */
-package main.Classes;
+package main.java.logicImplementation;
+
+import main.java.userInterface.MessegesForUser;
+import main.java.userInterface.CommunicationWithTheUser;
 
 import java.util.Scanner;
 
 public class RequestFunctions {
     CommunicationWithTheUser communicationWithTheUser;
     CheckFunctions checkFunctions;
-    String numDict;
-    String selectItem;
+    private String numDict;
+    private String selectItem;
 
     public RequestFunctions(CommunicationWithTheUser communicationWithTheUser, CheckFunctions checkFunctions) {
         this.communicationWithTheUser = communicationWithTheUser;
@@ -30,9 +34,9 @@ public class RequestFunctions {
 
     public String promptUserSelection(){
         Scanner scanner = new Scanner(System.in);
-        communicationWithTheUser.promptAction();
+        communicationWithTheUser.showMessege(MessegesForUser.REQUEST_ACTION.getMessege());
         setSelectItem(scanner.nextLine());
-        if (checkFunctions.chekUserSelection(selectItem) != true) {
+        if (!checkFunctions.checkUserSelection(selectItem)) {
             promptUserSelection();
         }
         return selectItem;
@@ -40,9 +44,9 @@ public class RequestFunctions {
 
     public String promptDictionaryType(){
         Scanner scanner = new Scanner(System.in);
-        communicationWithTheUser.promptDictionary();
+        communicationWithTheUser.showMessege(MessegesForUser.PROMPT_DICTIOARY_TYPE.getMessege());
         setNumDict(scanner.nextLine());
-        if (checkFunctions.checkDictionaryTypeSelection(numDict) != true) {
+        if (!checkFunctions.checkDictionaryTypeSelection(numDict)) {
             promptDictionaryType();
         }
         return numDict;
@@ -51,13 +55,13 @@ public class RequestFunctions {
     public String requestExpressiont(String numDict){
         String stringToFile = communicationWithTheUser.promptLine();
         if("1".equals(numDict)){
-            while (checkFunctions.checkSymbolString(stringToFile) != true){
-                communicationWithTheUser.showStringFormatForExpression();
+            while (!checkFunctions.checkSymbolString(stringToFile)){
+                communicationWithTheUser.showMessege(MessegesForUser.SHOW_STRING_FORMAT_FOR_EXPRESSION_MESSEGE.getMessege());//showStringFormatForExpression();
                 stringToFile = communicationWithTheUser.promptLine();
             }
         }else if ("2".equals(numDict)){
-            while (checkFunctions.checkNumericString(stringToFile) != true){
-                communicationWithTheUser.showNumberFormatForExpression();
+            while (!checkFunctions.checkNumericString(stringToFile)){
+                communicationWithTheUser.showMessege(MessegesForUser.SHOW_NUMBER_FORMAT_FOR_EXPRESSION_MESSEGE.getMessege());//showNumberFormatForExpression();
                 stringToFile = communicationWithTheUser.promptLine();
             }
         }
@@ -67,13 +71,13 @@ public class RequestFunctions {
     public String requestExpressionValue(String numDict){
         String stringToFile = communicationWithTheUser.promptLine();
         if("1".equals(numDict)){
-            while (checkFunctions.checkSymbolExpressionValue(stringToFile) != true){
-                communicationWithTheUser.showStringFormatForExpressionValue();
+            while (!checkFunctions.checkSymbolExpressionValue(stringToFile)){
+                communicationWithTheUser.showMessege(MessegesForUser.SHOW_STRING_FORMAT_FOR_VALUE_MESSEGE.getMessege());//showStringFormatForExpressionValue();
                 stringToFile = communicationWithTheUser.promptLine();
             }
         }else if ("2".equals(numDict)){
-            while (checkFunctions.checkNumericExpressionValue(stringToFile) != true){
-                communicationWithTheUser.showNumberFormatForExpressionValue();
+            while (!checkFunctions.checkNumericExpressionValue(stringToFile)){
+                communicationWithTheUser.showMessege(MessegesForUser.SHOW_NUMBER_FORMAT_FOR_VALUE_MESSEGE.getMessege());//showNumberFormatForExpressionValue();
                 stringToFile = communicationWithTheUser.promptLine();
             }
         }
